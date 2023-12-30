@@ -1,0 +1,8 @@
+
+.vscode/settings.json
+desktop.ini
+*.pyc
+*.pyo
+*.pyd
+__pycache__
+*.json
