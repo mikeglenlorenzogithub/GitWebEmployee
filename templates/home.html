@@ -11,22 +11,25 @@ Home
             <div class="col">
                 <div class="text-center">
                     <h3>
-                        <button type="button" class="btn btn-primary float-start" data-toggle="modal" data-target="#modal-add-single">
+                        <button type="button" class="btn btn-primary float-start" data-toggle="modal" data-target="#modal-create-single">
                             Add New Employee
                         </button>
-                        <b>Manage Employees</b>
-                        <button type="button" class="btn btn-secondary float-end" data-toggle="modal" data-target="#modal-add-multi">
-                            Add Multiple New Employees
+
+                        <a href="/download" class="btn btn-success btn-xs">Download Employees Data</a>
+
+                        <button type="button" class="btn btn-secondary float-end" data-toggle="modal" data-target="#modal-create-multi">
+                            Add Multiple New Employees from Files
                         </button>
                     </h3>
                 </div>
 
-                <table class="table table-hover table-dark">
+                <table class="employee-table table table-hover table-striped table-dark">
                     <tr class="table-header text-center">
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
+                        <th>Address</th>
                         <th>Action</th>
                     </tr>
 
@@ -36,14 +39,15 @@ Home
                         <td>{{employee.name}}</td>
                         <td>{{employee.email}}</td>
                         <td>{{employee.phone}}</td>
+                        <td>{{employee.address}}</td>
 
                         <td class="text-center">
-                            <a href="/update/{{employee.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-edit{{employee.id}}">Edit</a>
+                            <a href="/update/{{employee.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-update{{employee.id}}">Edit</a>
                             <a href="/delete/{{employee.id}}" class="btn btn-danger btn-xs" onclick="return confirm ('Delete This Employee Data?')">Delete</a>
                         </td>
 
-                        <!-- MODAL EDIT EMPLOYEE -->
-                        <div id="modal-edit{{employee.id}}" class="modal fade" role="dialog">
+                        <!-- MODAL UPDATE EMPLOYEE -->
+                        <div id="modal-update{{employee.id}}" class="modal fade" role="dialog">
                             <div class="modal-dialog">
                                 <div class="modal-content">
 
@@ -54,33 +58,30 @@ Home
                                     <div class="modal-body">
                                         <form action="{{url_for('update')}}" method="POST">
                                             <div class="form-group">
-
                                                 <label>Name:</label>
                                                 <input type="hidden" name="id" value="{{employee.id}}">
                                                 <input type="text" class="form-control" name="name" value="{{employee.name}}">
-
                                             </div>
 
                                             <div class="form-group">
-
                                                 <label>Email:</label>
                                                 <input type="text" class="form-control" name="email" value="{{employee.email}}">
-
                                             </div>
 
                                             <div class="form-group">
-
                                                 <label>Phone:</label>
                                                 <input type="number" class="form-control" name="phone" value="{{employee.phone}}">
-
                                             </div>
 
                                             <div class="form-group">
+                                                <label>address:</label>
+                                                <input type="text" class="form-control" name="address" value="{{employee.address}}">
+                                            </div>
 
+                                            <div class="form-group">
                                                 <button type="submit" class="btn btn-success">
                                                     Update
                                                 </button>
-
                                             </div>
                                         </form>
                                     </div>
@@ -105,8 +106,8 @@ Home
     </div>
 </div>
 
-<!-- MODAL ADD NEW EMPLOYEE -->
-<div id="modal-add-single" class="modal fade" role="dialog">
+<!-- MODAL CREATE NEW EMPLOYEE -->
+<div id="modal-create-single" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -117,30 +118,63 @@ Home
             <div class="modal-body">
                 <form action="{{url_for('create')}}" method="POST">
                     <div class="form-group">
-
                         <label>Name:</label>
                         <input type="text" class="form-control" name="name" required="1">
-
                     </div>
 
                     <div class="form-group">
-
                         <label>Email:</label>
                         <input type="text" class="form-control" name="email" required="1">
-
                     </div>
 
                     <div class="form-group">
-
                         <label>Phone:</label>
                         <input type="number" class="form-control" name="phone" required="1">
+                    </div>
 
+                    <div class="form-group">
+                        <label>Address:</label>
+                        <input type="text" class="form-control" name="address" required="1">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            Add New Employee
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Cancel
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CREATE MULTI NEW EMPLOYEE -->
+<div id="modal-create-multi" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Add Multiple Employee</h4>
+            </div>
+
+            <div class="modal-body">
+                <form action="{{url_for('multi')}}" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Upload your csv file <b>(File must contain No, Name, Email, Phone, Address)</b></label>
+                        <input type="file" class="form-control" name="upload" id="upload" required="1">
                     </div>
 
                     <div class="form-group">
 
                         <button type="submit" class="btn btn-success">
-                            Add New Employee
+                            Submit
                         </button>
 
                     </div>
@@ -156,4 +190,5 @@ Home
         </div>
     </div>
 </div>
+
 {% endblock %}
