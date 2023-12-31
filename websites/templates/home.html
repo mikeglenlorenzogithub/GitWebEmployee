@@ -6,11 +6,12 @@ Home
 
 {% block content %}
 <div class="content">
-    <div class="container">
+    <!-- <div class="container"> -->
         <div class="row justify-content-center">
             <div class="col">
                 <div class="text-center">
                     <h3>
+                        {% if user.is_authenticated %}
                         <button type="button" class="btn btn-primary float-start" data-toggle="modal" data-target="#modal-create-single">
                             Add New Employee
                         </button>
@@ -20,31 +21,45 @@ Home
                         <button type="button" class="btn btn-secondary float-end" data-toggle="modal" data-target="#modal-create-multi">
                             Add Multiple New Employees from Files
                         </button>
+                        {% else %}
+                        Please Login To Access Employees Data
+                        {% endif %}
                     </h3>
                 </div>
 
-                <table class="employee-table table table-hover table-striped table-dark">
+                <table class="employee-table table table-hover table-striped-columns table-dark align-middle">
                     <tr class="table-header text-center">
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Address</th>
+                        {% if user.is_authenticated %}
                         <th>Action</th>
+                        {% else %}
+                        {% endif %}
                     </tr>
 
                     {% for employee in employees %}
                     <tr>
+                        {% if user.is_authenticated %}
                         <td>{{employee.id}}</td>
                         <td>{{employee.name}}</td>
                         <td>{{employee.email}}</td>
                         <td>{{employee.phone}}</td>
                         <td>{{employee.address}}</td>
-
+                        
                         <td class="text-center">
                             <a href="/update/{{employee.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modal-update{{employee.id}}">Edit</a>
                             <a href="/delete/{{employee.id}}" class="btn btn-danger btn-xs" onclick="return confirm ('Delete This Employee Data?')">Delete</a>
                         </td>
+                        {% else %}
+                        <td>{{employee.id}}</td>
+                        <td>****************</td>
+                        <td>****************</td>
+                        <td>****************</td>
+                        <td>****************</td>
+                        {% endif %}
 
                         <!-- MODAL UPDATE EMPLOYEE -->
                         <div id="modal-update{{employee.id}}" class="modal fade" role="dialog">
@@ -56,7 +71,7 @@ Home
                                     </div>
 
                                     <div class="modal-body">
-                                        <form action="{{url_for('update')}}" method="POST">
+                                        <form action="{{url_for('views.update')}}" method="POST">
                                             <div class="form-group">
                                                 <label>Name:</label>
                                                 <input type="hidden" name="id" value="{{employee.id}}">
@@ -103,7 +118,7 @@ Home
 
             </div>
         </div>
-    </div>
+    <!-- </div> -->
 </div>
 
 <!-- MODAL CREATE NEW EMPLOYEE -->
@@ -116,7 +131,7 @@ Home
             </div>
 
             <div class="modal-body">
-                <form action="{{url_for('create')}}" method="POST">
+                <form action="{{url_for('views.create')}}" method="POST">
                     <div class="form-group">
                         <label>Name:</label>
                         <input type="text" class="form-control" name="name" required="1">
@@ -165,7 +180,7 @@ Home
             </div>
 
             <div class="modal-body">
-                <form action="{{url_for('multi')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{url_for('views.multi')}}" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label>Upload your csv file <b>(File must contain No, Name, Email, Phone, Address)</b></label>
                         <input type="file" class="form-control" name="upload" id="upload" required="1">
